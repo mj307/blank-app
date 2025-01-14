@@ -1,0 +1,8 @@
+[my_connection]
+account = "GOB20497.us-west-2"
+user = "MEDHAVI"
+password = "#Anurag40" 
+role = "ACCOUNTADMIN"
+warehouse = "MEDIUM"
+database = "ASSIGNMENT"
+schema = "DATA"
