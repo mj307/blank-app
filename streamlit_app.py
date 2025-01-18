@@ -7,7 +7,7 @@ import re
 snowflake_params = st.secrets
 
 # Ensure the parameters are available
-if not snowflake_params:
+if not st.secrets:
     st.error("Snowflake connection parameters not found in secrets.toml.")
 else:
     # Set up the Snowpark session
