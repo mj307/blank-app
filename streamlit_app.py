@@ -3,29 +3,27 @@ import snowflake.connector  # to query Snowflake
 import snowflake.snowpark as snowpark
 import re
 
-# Read Snowflake connection parameters from Streamlit secrets
-snowflake_params = st.secrets
+conn = st.connection("snowflake")
+session = conn.session()
+# snowflake_params = st.secrets
 
-# Ensure the parameters are available
-if not st.secrets:
-    st.error("Snowflake connection parameters not found in secrets.toml.")
-else:
-    # Set up the Snowpark session
-    session = snowpark.Session.builder.configs({
-        "account": snowflake_params["account"],
-        "user": snowflake_params["user"],
-        "password": snowflake_params["password"],
-        "warehouse": snowflake_params["warehouse"],
-        "database": snowflake_params["database"],
-        "schema": snowflake_params["schema"],
-        "role": snowflake_params["role"]
-    }).create()
+# if not st.secrets:
+#     st.error("Snowflake connection parameters not found in secrets.toml.")
+# else:
+#     session = snowpark.Session.builder.configs({
+#         "account": snowflake_params["account"],
+#         "user": snowflake_params["user"],
+#         "password": snowflake_params["password"],
+#         "warehouse": snowflake_params["warehouse"],
+#         "database": snowflake_params["database"],
+#         "schema": snowflake_params["schema"],
+#         "role": snowflake_params["role"]
+#     }).create()
 
-    # Set up page config for Streamlit
-    st.set_page_config(page_title="Setup Genie", page_icon="❄️", layout="wide")
+    
+st.set_page_config(page_title="Setup Genie", page_icon="❄️", layout="wide")
 
-    # Style the Streamlit app
-    st.markdown("""
+st.markdown("""
     <style>
         body {
             background-color: #f0f8ff;
@@ -69,16 +67,16 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    st.title("Setup Genie")
+st.title("Setup Genie")
 
-    question = st.text_input('Ask a Question', 'My app crashed. What do I do?')
+question = st.text_input('Ask a Question', 'My app crashed. What do I do?')
 
     # Define helper functions
-    def limit_to_4_sentences(response):
+def limit_to_4_sentences(response):
         sentences = response.split(". ")
         return ". ".join(sentences[:4]) + ('.' if len(sentences) > 4 else '')
 
-    def filter_relevant_content(response):
+def filter_relevant_content(response):
         patterns_to_exclude = [
             r"Step \d+: .*",
             r"Query \d+: .*",
@@ -98,14 +96,14 @@ else:
         cleaned_response = re.sub(combined_pattern, "", response, flags=re.DOTALL)
         return cleaned_response.strip()
 
-    def word_overlap(question, text):
+def word_overlap(question, text):
         question_words = set(re.findall(r'\w+', question.lower())) 
         text_words = set(re.findall(r'\w+', text.lower())) 
         common_words = question_words.intersection(text_words)
         return len(common_words) >= 2  
 
     # Query handling for "Instructions" and "Teacher Notes"
-    if st.button(":snowflake: Submit", type="primary"):
+if st.button(":snowflake: Submit", type="primary"):
         # Instructions Section
         with st.expander("📚 Instructions (Only)", expanded=True):
             instructions_query = f"""
