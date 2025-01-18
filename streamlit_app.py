@@ -4,7 +4,7 @@ import snowflake.snowpark as snowpark
 import re
 
 # Read Snowflake connection parameters from Streamlit secrets
-snowflake_params = st.secrets["connections"]["snowflake"]
+snowflake_params = st.secrets["connections"]
 
 # Ensure the parameters are available
 if not snowflake_params:
