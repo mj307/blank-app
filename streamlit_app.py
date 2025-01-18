@@ -3,6 +3,8 @@ import snowflake.connector  # to query Snowflake
 import snowflake.snowpark as snowpark
 import re
 
+st.set_page_config(page_title="Setup Genie", page_icon="❄️", layout="wide")
+
 conn = st.connection("snowflake")
 session = conn.session()
 # snowflake_params = st.secrets
@@ -21,7 +23,6 @@ session = conn.session()
 #     }).create()
 
     
-st.set_page_config(page_title="Setup Genie", page_icon="❄️", layout="wide")
 
 st.markdown("""
     <style>
